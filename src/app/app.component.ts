@@ -14,7 +14,44 @@ export class AppComponent implements AfterViewInit{
     workImgs = document.querySelectorAll(".work-img");
     @ViewChild("checkBox") checkBox!: HTMLInputElement
     @ViewChild("yearEl") yearEl!: HTMLElement
-    images: Array<string> = ["", "", ""]
+    skillsImages: Array<{ src: string, title: string }> = [
+      {
+        title: "Scala",
+        src: "assets/images/skills/scala.svg"
+      },
+      {
+        title: "Angular",
+        src: "assets/images/skills/angular.svg"
+      },
+      {
+        title: "Akka",
+        src: "assets/images/skills/akka.svg"
+      },
+      {
+        title: "Java",
+        src: "assets/images/skills/java.svg"
+      },
+      {
+        title: "MySQL",
+        src: "assets/images/skills/mysql.svg"
+      },
+      {
+        title: "Postgres",
+        src: "assets/images/skills/postgres.svg"
+      },
+      {
+        title: "Docker",
+        src: "assets/images/skills/docker.svg"
+      },
+      {
+        title: "PHP",
+        src: "assets/images/skills/php.svg"
+      },
+      {
+        title: "Primeng",
+        src: "assets/images/skills/primeng.svg"
+      },
+    ]
     storedTheme = localStorage.getItem("theme");
 
     observer: IntersectionObserver
