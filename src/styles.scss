@@ -78,6 +78,7 @@ body.light {
   margin: 0;
   padding: 0;
   box-sizing: inherit;
+  scroll-behavior: smooth;
 }
 
 html {
@@ -379,7 +380,7 @@ main {
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
   background-color: var(--bg-color-primary);
-  //transform: translateY(calc(-1 * var(--radius)));
+  transform: translateY(calc(-1 * var(--radius)));
 }
 
 @media (max-width: 1185px) {
@@ -480,15 +481,69 @@ main {
   background-repeat: no-repeat;
   position: relative;
 }
-
-body.dark .header {
-  background-image: linear-gradient(#0000008b, #000000e6),
-  url("assets/images/hero-bg.webp");
+body.light .header{
+  position:relative;
+  background: rgb(255,255,255);
+  background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,174,198,1) 52%, rgba(255,181,203,1) 100%);
+  color:black;
+}
+body.dark .header{
+  position:relative;
+  background: rgb(0,0,0);
+  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(93,64,73,1) 52%, rgba(140,103,114,1) 100%);
+  color:white;
 }
 
-body.light .header {
-  background-image: linear-gradient(#ffffffa2, #ffffffe6),
-  url("assets/images/hero-bg-light.webp");
+.waves {
+  position:absolute;
+  width: 100%;
+  height:20vh;
+  margin-bottom:-7px; /*Fix for safari gap*/
+  top: 80%;
+  left:0;
+}
+
+/* Animation */
+
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+    transform: translate3d(-90px,0,0);
+  }
+  100% {
+    transform: translate3d(85px,0,0);
+  }
+}
+/*Shrinking for mobile*/
+@media (max-width: 768px) {
+  .waves {
+    height:40px;
+    min-height:40px;
+  }
+  .content {
+    height:30vh;
+  }
+  h1 {
+    font-size:24px;
+  }
 }
 
 .header-textbox {
