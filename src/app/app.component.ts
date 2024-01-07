@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild, ViewChildren} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-root',
@@ -8,10 +9,8 @@ import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 export class AppComponent implements AfterViewInit {
 
   @ViewChild("nav") nav!: ElementRef
-  @ViewChild("navMenu") navMenu!: HTMLElement
-  @ViewChild("btnToggleNav") btnToggleNav!: HTMLElement
-  workEls = document.querySelectorAll(".work-box");
-  workImgs = document.querySelectorAll(".work-img");
+  @ViewChildren('workBox', {read: ElementRef}) workEls!: ElementRef[];
+  @ViewChildren('image', {read: ElementRef}) image!: ElementRef[];
   @ViewChild("checkBox") checkBox!: HTMLInputElement
   skillsImages: Array<{ src: string, title: string }> = [
     {
@@ -57,29 +56,39 @@ export class AppComponent implements AfterViewInit {
   ]
   storedTheme = localStorage.getItem("theme");
 
-  observer: IntersectionObserver
+  workBoxesObserver: IntersectionObserver
+  isMenuShowing = false
+  formSendEmail: FormGroup
 
-  constructor() {
-    this.initWorkElementsObs()
-    this.initImages()
-    this.observer = new IntersectionObserver(
+  constructor(
+    private fb: FormBuilder
+  ) {
+    this.workBoxesObserver = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
         const [textbox, picture] = Array.from(entry.target.children);
         if (entry.isIntersecting) {
           picture.classList.remove("transform");
           Array.from(textbox.children).forEach(
-            (el: any) => (el.style.animationPlayState = "running")
+            (el: any) => {
+              (el.style.animationPlayState = "running")
+            }
           );
         }
       },
       {threshold: 0.3}
     );
-
+    this.formSendEmail = fb.group({
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      request: ['', [Validators.required]]
+    })
   }
 
   ngAfterViewInit(): void {
     this.checkBox.checked = localStorage.getItem("theme") == "dark"
+    this.initWorkElementsObs()
+    this.initImages()
   }
 
   onToggleNav() {
@@ -87,20 +96,12 @@ export class AppComponent implements AfterViewInit {
   }
 
   toggleNav() {
-    console.log(this.nav.nativeElement.classList)
     this.nav.nativeElement.classList.toggle("hidden");
 
     // Prevent screen from scrolling when menu is opened
     document.body.classList.toggle("lock-screen");
 
-    if (this.nav.nativeElement.classList.contains("hidden")) {
-      this.btnToggleNav.textContent = "menu";
-    } else {
-      // When menu is opened after transition change text respectively
-      setTimeout(() => {
-        this.btnToggleNav.textContent = "close";
-      }, 475);
-    }
+    this.isMenuShowing = !this.isMenuShowing;
   }
 
   onEscape($event: KeyboardEvent) {
@@ -111,12 +112,12 @@ export class AppComponent implements AfterViewInit {
 
   private initWorkElementsObs() {
     this.workEls.forEach(element => {
-      this.observer.observe((element))
-    })
+      this.workBoxesObserver.observe(element.nativeElement);
+    });
   }
 
   private initImages() {
-    this.workImgs.forEach((workImg) => workImg.classList.add("transform"));
+    this.image.forEach((workImg) => workImg.nativeElement.classList.add("transform"));
   }
 
   onSwitchDarkMode() {
@@ -134,6 +135,10 @@ export class AppComponent implements AfterViewInit {
   }
 
   currentColor() {
-    return this.storedTheme == "dark"? "white" : "black";
+    return this.storedTheme == "dark" ? "white" : "black";
+  }
+
+  onSendRequest() {
+    console.log(this.formSendEmail.value)
   }
 }

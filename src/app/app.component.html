@@ -4,16 +4,18 @@
 
   <div class="menu-btn-container">
     <div class="container">
-      <button type="button" class="menu-btn" #btnToggleNav (click)="onToggleNav()">menu</button>
+      <button type="button" class="menu-btn " #btnToggleNav (click)="onToggleNav()">
+        <span class=" {{isMenuShowing? 'show': 'hide'}}">Close</span>
+        <span class=" {{!isMenuShowing? 'show': 'hide'}}">Menu</span>
+      </button>
     </div>
   </div>
 
-  <nav class="nav hidden" #nav>
+  <nav class="nav hidden" (click)="onToggleNav()"  #nav>
     <ol class="nav-items" #navMenu>
-      <li class="nav-item"><a (click)="onToggleNav()" href="#">Home</a></li>
-      <li class="nav-item"><a (click)="onToggleNav()" href="#work">My Work</a></li>
-      <li class="nav-item"><a (click)="onToggleNav()" href="#blog">See Blog</a></li>
-      <li class="nav-item"><a (click)="onToggleNav()" href="#skills">My Skills</a></li>
+      <li class="nav-item"><a  href="#">Home</a></li>
+      <li class="nav-item"><a  href="#work">My Work</a></li>
+      <li class="nav-item"><a  href="#skills">My Skills</a></li>
       <li class="nav-item">
         <a href="#contact" data-focused="last-focused">Contact</a>
       </li>
@@ -41,19 +43,19 @@
     </div>
 
     <!--Waves Container-->
-      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-           viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-        <defs>
-          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+         viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
 
-        </defs>
-        <g class="parallax">
-          <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
-          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-          <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-        </g>
-      </svg>
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7)" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+      </g>
+    </svg>
     </div>
 </header>
 
@@ -63,7 +65,7 @@
     <div class="container">
       <h2 class="h2" id="work">My Work</h2>
       <div class="work-boxes">
-        <div class="work-box" #workEls>
+        <div #workBox class="work-box" #workEls>
           <div class="work-textbox">
             <!-- Add your project title here -->
             <h3 class="h3">portfolio template</h3>
@@ -106,16 +108,16 @@
 
           <!-- Update img src and alt attribute  -->
 
-          <picture class="work-img" #workImgs>
-            <img *ngFor="let image of skillsImages"
+          <picture class="work-img" #image>
+            <img
                  loading="lazy"
-                 src="{{image}}"
+                 src="{{skillsImages[0].src}}"
                  alt="agency elevation"
 
             />
           </picture>
         </div>
-        <div class="work-box">
+        <div #workBox class="work-box">
           <div class="work-textbox">
             <!-- Add your project title here -->
             <h3 class="h3">agencyelevation.com</h3>
@@ -151,7 +153,7 @@
             </div>
           </div>
           <!-- Update img src and alt attribute  -->
-          <picture class="work-img">
+          <picture class="work-img" #image>
             <img
               loading="lazy"
               src="assets/images/work/agency-elevation.webp"
@@ -159,7 +161,7 @@
             />
           </picture>
         </div>
-        <div class="work-box">
+        <div #workBox class="work-box">
           <div class="work-textbox">
             <!-- Add your project title here -->
             <h3 class="h3">contribute.dev</h3>
@@ -196,7 +198,7 @@
             </div>
           </div>
           <!-- Update img src and alt attribute  -->
-          <picture class="work-img">
+          <picture class="work-img" #image>
             <img
               loading="lazy"
               src="assets/images/work/contribute-dev.webp"
@@ -214,14 +216,15 @@
     <div class="container">
       <h2 class="h2" id="skills">My Toolkit</h2>
       <div class="skills-imgs">
-        <figure>
-          <img *ngFor="let image of skillsImages"
-               src="{{image.src}}"
-               alt="{{image.title}}"
-               class="skills-img"
+        <picture *ngFor="let img of skillsImages" #skill>
+          <img
+               src="{{img.src}}"
+               alt="{{img.title}}"
+               class="skills-img "
                loading="lazy"
-               title="React">
-        </figure>
+               title="React"
+               >
+        </picture>
       </div>
     </div>
   </section>
@@ -365,17 +368,13 @@
             performance. I tend to code things from scratch and enjoy
             bringing ideas to life.
           </p>
-          <p class="contact-text">
-            I'm also an open-source developer, and in my spare time, I do
-            digital art with my iPad Pro.
-          </p>
           <!-- Replace src with your signatures and name -->
           <label>Cesar López</label>
         </div>
-        <form action="#" class="contact-form" netlify>
+        <form action="#" class="contact-form" [formGroup]="formSendEmail" (ngSubmit)="onSendRequest()">
           <div class="form-field">
             <label for="name">Name</label>
-            <input type="text" name="name" id="name" required/>
+            <input type="text" name="name" id="name" formControlName="name"/>
           </div>
           <div class="form-field">
             <label for="email">Email</label>
@@ -385,11 +384,12 @@
               id="email"
               required
               inputmode="email"
+              formControlName="email"
             />
           </div>
           <div class="form-field">
             <label for="message">How can I help you?</label>
-            <textarea name="message" id="message" required></textarea>
+            <textarea name="message" id="message" required formControlName="request"></textarea>
           </div>
           <button type="submit" class="btn btn-cta">Send</button>
         </form>
